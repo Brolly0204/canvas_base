@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>绘制弧形</title>
+</head>
+<body>
+  <canvas id="canvas" width="600" height="600"></canvas>
+  <script type="text/javascript">
+    var canvas = document.querySelector('#canvas')
+    var ctx = canvas.getContext('2d')
+
+    ctx.lineWidth = 10
+    ctx.beginPath()
+    // ctx.arc(300, 300, 100, 0, Math.PI * 2, false)
+    ctx.arc(300, 300, 100, 0.5 * Math.PI, 1.5 * Math.PI, true)
+
+    ctx.strokeStyle = 'green'
+    ctx.fillStyle = 'red'
+    ctx.fill()
+    ctx.stroke()
+  </script>
+</body>
+</html>

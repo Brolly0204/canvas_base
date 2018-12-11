@@ -1,6 +1,12 @@
 # 开启Canvas之旅 - 基础篇
 
-## Canvas 是什么
+## 致懂得努力的我们
+
+夫君子之行，静以修身，俭以养德。非淡泊无以明志，非宁静无以致远。夫学须静也，才须学也，非学无以广才，非志无以成学。
+
+淫慢则不能励精，险躁则不能治性。年与时驰，意与日去，遂成枯落，多不接世，悲守穷庐，将复何及！
+
+## Canvas简述
 Canvas 是HTML5新增的元素，让我们通过JavaScript脚本来绘制图像, 可以用JavaScript在上面绘制各种图表、动画等。
 
 基于Canvas的一些库：
@@ -436,6 +442,72 @@ ctx.stroke()
 
 <img src="assets/markdown-img-paste-20181211123905648.png" style="display: block; margin: 0 auto" width="60%" height="60%" />
 
+### 绘制圆形
+
+#### arc
+
+JavaScript 语法：
+
+```
+context.arc(x,y,r,sAngle,eAngle,counterclockwise);
+```
+
+参数
+
+<img src="assets/markdown-img-paste-20181211164618412.png" style="display: block; margin: 0 auto" />
+
+JS
+
+```
+var canvas = document.querySelector('#canvas')
+var ctx = canvas.getContext('2d')
+
+ctx.lineWidth = 10
+ctx.beginPath()
+
+ctx.arc(300, 300, 100, 0, Math.PI * 2, false)
+
+ctx.strokeStyle = 'blue'
+ctx.fillStyle = 'red'
+ctx.fill()
+ctx.stroke()
+```
+
+效果如下：
+
+<img src="assets/markdown-img-paste-20181211165025949.png" style="display: block; margin: 0 auto" width="50%" height="50%" />
+
+
+开始角与结束角
+
+
+<img src="assets/markdown-img-paste-20181211164911478.png" style="display: block; margin: 0 auto" />
+
+#### 绘制半圆
+
+JS
+
+```
+var canvas = document.querySelector('#canvas')
+var ctx = canvas.getContext('2d')
+
+ctx.lineWidth = 10
+ctx.beginPath()
+
+// 逆时针绘制
+ctx.arc(300, 300, 100, 0.5 * Math.PI, 1.5 * Math.PI, true)
+
+ctx.strokeStyle = 'green'
+ctx.fillStyle = 'red'
+ctx.fill()
+ctx.stroke()
+```
+
+效果如下：
+
+<img src="assets/markdown-img-paste-20181211165414958.png" style="display: block; margin: 0 auto" width="50%" height="50%" />
+
+
 ### 绘制五角星
 
 JS
@@ -493,6 +565,8 @@ drawStart(ctx, 100, 200, 300, 300, 'red', 'white')
 
 #### 五角星数学知识补下
 
+<img src="assets/markdown-img-paste-20181211164400577.png" style="display: block; margin: 0 auto" width="50%" height="50%" />
+
 ```
 // 求弧度
 // 为L = n（圆心角度数）× π × r（半径）/180（角度制）
@@ -538,12 +612,12 @@ var sy = function (i, r, y, d) {
 ctx.lineTo(X, Y)
 ```
 
-## 致爱学习的我们
 
-夫君子之行，静以修身，俭以养德。非淡泊无以明志，非宁静无以致远。夫学须静也，才须学也，非学无以广才，非志无以成学。
-淫慢则不能励精，险躁则不能治性。年与时驰，意与日去，遂成枯落，多不接世，悲守穷庐，将复何及！
+<img src="assets/markdown-img-paste-20181211164055954.png" style="display: block; margin: 0 auto" width="50%" height="50%" />
 
-                                                                                —— 诸葛亮
+
+<img src="assets/markdown-img-paste-20181211164143358.png" style="display: block; margin: 0 auto" width="50%" height="50%" />
+
 
 ## 2018.12.12 我将带大家实现你画我猜的画板（绘画 橡皮擦 图片生成 本地保存 画笔切换）
 
