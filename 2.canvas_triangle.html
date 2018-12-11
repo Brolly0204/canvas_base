@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>几何图形之三角形</title>
+  <style media="screen">
+    #canvas {
+      display: block;
+      border: 1px solid pink;
+      margin: 30px auto;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas" width="600" height="600"></canvas>
+
+  <script type="text/javascript">
+    var canvas = document.querySelector('#canvas')
+    var ctx = canvas.getContext('2d')
+
+    // 设置绘制线条宽度
+    ctx.lineWidth = 10
+    // 设置绘制线条颜色
+    ctx.strokeStyle = 'red'
+    // 设置填充颜色
+    ctx.fillStyle = 'pink'
+
+    // 开始一条全新的路径
+    ctx.beginPath()
+
+    // 制定路径
+    ctx.moveTo(300, 50)
+    ctx.lineTo(550, 500)
+    ctx.lineTo(50, 500)
+
+    // 闭合路径
+    ctx.closePath()
+    // 进行填充
+    ctx.fill()
+    // 进行绘制
+    ctx.stroke()
+  </script>
+</body>
+</html>

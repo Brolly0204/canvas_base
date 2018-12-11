@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>strokeRect绘制一个无填充色的矩形</title>
+</head>
+<body>
+  <canvas id="canvas" width="600" height="600"></canvas>
+  <script type="text/javascript">
+    var canvas = document.querySelector('#canvas')
+    var ctx = canvas.getContext('2d')
+
+    ctx.lineWidth = 10
+    ctx.strokeStyle = 'red'
+    ctx.strokeRect(100, 100, 300, 300)
+  </script>
+</body>
+</html>

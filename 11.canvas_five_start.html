@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+<canvas id="canvas" width="600" height="600"></canvas>
+<script type="text/javascript">
+  var canvas = document.querySelector('#canvas')
+  var ctx = canvas.getContext('2d')
+
+  // 求弧度
+  // 为L = n（圆心角度数）× π × r（半径）/180（角度制）
+
+  // 对边与斜边的比叫做正弦（sine），记作sin
+  // 邻边与斜边的比叫做余弦（cosine），记作cos
+  // 对边与邻边的比叫做正切（tangent），记作tan
+
+  // JS Math.sin() 与 Math.cos() 用法
+  // Math.sin(x) x 的正玄值。返回值在 -1.0 到 1.0 之间
+  // Math.cos(x) x 的余弦值。返回的是 -1.0 到 1.0 之间的数
+  // 这两个函数中的X 都是指的“弧度”而非“角度”，
+
+  // 弧度的计算公式为：2 * PI / 360 * 角度
+  // 30° 角度 的弧度 = 2 * PI / 360 * 30
+
+  // 如何得到圆上每个点的坐标？
+  // 在圆的坐标系中 半径r为斜边 x轴为邻边 y轴为对边
+  // 正弦 = y / r
+  // 余弦 = x / r
+
+  // 解决思路：根据三角形的正弦、余弦来得值
+  // 假设一个圆的圆心坐标是(a, b)，半径为r
+
+  // X = 圆心x轴坐标 + 弧度的余弦值 * 半径
+  // 则圆上每个点的X坐标= a + Math.cos(2 * Math.PI / 360) * r
+
+  // Y = 圆心y轴坐标 + 弧度的正弦值 * 半径
+  // Y坐标 = b + Math.cos(2 * Math.PI / 360) * r
+
+
+
+  // 计算x轴坐标值
+  // X = Math.cos(弧度) * 半径 + 圆心x轴坐标
+  var cx = function(i, r, x, d) {
+    return Math.cos((d + i * 72) / 180 * Math.PI) * r + x
+  }
+
+  // 计算y轴坐标值
+  // Y = Math.sin(弧度) * 半径 + 圆心y轴坐标
+  var sy = function (i, r, y, d) {
+    return -Math.sin((d + i * 72) / 180 * Math.PI) * r + y
+  }
+
+  /**
+   * @desc 绘制五角星
+   * @param  {Object} ctx  2d渲染上下文
+   * @param  {Number} r  内圆半径
+   * @param  {Number} R  外圆半径
+   * @param  {Number} x  圆心x轴位置
+   * @param  {Number} y  圆心y轴位置
+   * @param  {Color} fillColor  填充色
+   * @param  {Color} strokeColor  描边色
+   *
+   */
+  function drawStart(ctx, r, R, x, y, fillColor, strokeColor) {
+    ctx.fillStyle = fillColor
+    ctx.strokeStyle = strokeColor
+
+    ctx.beginPath()
+    // 绘制五个角
+    for (var i = 0; i < 5; i++) {
+      // 绘制外圆路径
+      ctx.lineTo(cx(i, R, x, 18), sy(i, R, y, 18))
+      // 绘制内圆路径
+      ctx.lineTo(cx(i, r, x, 54), sy(i, r, y, 54))
+    }
+    ctx.closePath()
+    ctx.fill()
+    ctx.stroke()
+  }
+  drawStart(ctx, 100, 200, 300, 300, 'red', 'white')
+</script>
+</body>
+</html>

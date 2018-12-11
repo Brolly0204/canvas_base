@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>一条直线</title>
+  <style media="screen">
+    #canvas {
+      display: block;
+      border: 1px solid pink;
+      margin: 30px auto;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script type="text/javascript">
+    var canvas = document.querySelector('#canvas')
+    var ctx = canvas.getContext('2d')
+
+    // 通过canvas元素设置宽高
+    canvas.width = 400
+    canvas.height = 400
+
+    // 设置线条宽度
+    ctx.lineWidth = 10
+
+    // 设置画笔开始绘制坐标（落笔点）
+    ctx.moveTo(100, 100)
+    // 连接点
+    ctx.lineTo(300, 300)
+
+    // 设置绘制颜色
+    ctx.strokeStyle = 'red'
+    // 根据moveTo和lineTo定制的路径 进行绘制
+    ctx.stroke()
+
+
+  </script>
+</body>
+</html>

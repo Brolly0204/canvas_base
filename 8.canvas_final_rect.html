@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>绘制一个完整的矩形</title>
+</head>
+<body>
+  <canvas id="canvas" width="600" height="600"></canvas>
+  <script type="text/javascript">
+    var canvas = document.querySelector('#canvas')
+    var ctx = canvas.getContext('2d')
+
+    ctx.lineWidth = 10
+    ctx.fillStyle = 'blue'
+    ctx.strokeStyle = 'red'
+
+    // 方式一
+    ctx.fillRect(100, 100, 200, 200)
+    ctx.strokeRect(100, 100, 200, 200)
+
+    // 方式二
+    ctx.rect(320, 100, 200, 200)
+    ctx.fill()
+    ctx.stroke()
+  </script>
+</body>
+</html>
