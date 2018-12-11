@@ -207,7 +207,9 @@ ctx.strokeStyle = 'blue'
 ctx.stroke()
 ```
 
-添加beginPath后 效果如下：
+添加beginPath后
+
+效果如下：
 
 <img src="assets/markdown-img-paste-20181211102051148.png" style="display: block; margin: 20px auto" width="70%" height="70%" />
 
@@ -260,7 +262,9 @@ ctx.fill()
 ctx.stroke()
 ```
 
-添加closePath 效果如下：
+添加closePath
+
+效果如下：
 
 <img src="assets/markdown-img-paste-20181211104021416.png" style="display: block; margin: 0 auto" width="50%" height="50%" />
 
@@ -283,7 +287,8 @@ ctx.lineTo(100, 500)
 ctx.stroke()
 ```
 
-效果
+效果如下：
+
 <img src="assets/markdown-img-paste-20181211112112278.png" style="display: block; margin: 0 auto" width="50%" height="50%" />
 
 ### 绘制矩形
@@ -342,6 +347,7 @@ ctx.fillRect(100, 100, 300, 300)
 ```
 
 效果如下：
+
 <img src="assets/markdown-img-paste-2018121112003425.png" style="display: block; margin: 0 auto" width="50%" height="50%" />
 
 #### 完整绘制一个矩形
@@ -427,6 +433,7 @@ ctx.stroke()
 ```
 
 效果如下：
+
 <img src="assets/markdown-img-paste-20181211123905648.png" style="display: block; margin: 0 auto" width="60%" height="60%" />
 
 ### 绘制五角星
