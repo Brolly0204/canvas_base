@@ -624,6 +624,10 @@ ctx.lineTo(X, Y)
 <img src="assets/markdown-img-paste-2018121115491245.png" style="display: block; margin: 0 auto" width="50%" height="50%" />
 
 
+
+## 掘金文章地址
+https://juejin.im/post/5c0f6fe16fb9a049e12a0d6a
+
 公开课时间：
 12月12日 晚上 20：00~21：30
 
@@ -633,7 +637,7 @@ https://ke.qq.com/course/58689
 教室地址:
 北京昌平区回龙观东大街地铁A口出，向西走100米（紧邻同仁堂）二楼201教室
 
-## 识别图中二维码获取更多学习资源
+## 获取更多学习资源
 
  <img src="assets/markdown-img-paste-20181211155219613.png" style="display: block; margin: 0 auto" width="35%" height="35%" />
  <img src="assets/markdown-img-paste-20181211154643836.png" style="display: block; margin: 0 auto" width="50%" height="50%" />
