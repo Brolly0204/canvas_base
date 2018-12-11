@@ -99,7 +99,7 @@ canvas绘图是基于路径的，肉眼看不到，先进行路径绘制 然后�
 ## 绘制几何图形
 
 ### 绘制三角形
-### HTML
+#### HTML
 
 ```
 <canvas id="canvas" width="600" height="600"></canvas>
