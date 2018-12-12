@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style type="text/css">
+    .container {
+      width: 740px;
+      margin: 20px auto 0;
+    }
+
+    #canvas {
+      display: block;
+      border: 20px solid #af37ff;
+    }
+
+    #canvas.activeEraser {
+      cursor: move;
+      /*cursor: url("");*/
+    }
+
+    .toolbar {
+      width: 100%;
+      height: 60px;
+      line-height: 60px;
+      padding: 0 30px;
+      box-sizing: border-box;
+      background-color: #ad62ff;
+      -webkit-user-select: none;
+    }
+
+    .toolbar #colorPicker {
+      vertical-align: middle;
+    }
+
+    .toolbar .colorButton {
+      width: 30px;
+      height: 30px;
+      vertical-align: middle;
+    }
+
+    #eraser {
+      width: 60px;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      vertical-align: middle;
+      margin-left: 10px;
+    }
+
+    #eraser.active {
+      background-color: #FFAA68;
+      color: #ffffff;
+      font-size: 14px;
+    }
+
+    .clearCanvas {
+      padding: 3px 5px;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <canvas id="canvas" width="700" height="400"></canvas>
+    <div class="toolbar">
+      更换颜色 <input id="colorPicker" type="color">
+      <input class="colorButton" type="button" style="background-color: #000000">
+      <input class="colorButton" type="button" style="background-color: #FFAA68">
+      <input class="colorButton" type="button" style="background-color: #af37ff">
+
+      <!-- 橡皮擦 -->
+      <button id="eraser">橡皮擦</button>
+
+      <!-- 清屏 -->
+      <button class="clearCanvas">清屏</button>
+
+      <!-- 保存图片 -->
+      <button class="saveImg">保存图片</button>
+
+      画笔粗细
+      <button class="bold">+</button>
+      <span class="boldVal">5</span>
+      <button class="thin">-</button>
+    </div>
+  </div>
+  <script type="text/javascript">
+    var $ = function (el) {
+      return document.querySelector(el)
+    }
+
+    var $$ = function (el) {
+      return document.querySelectorAll(el)
+    }
+
+    // 获取canvas元素
+    var canvas = document.querySelector('#canvas')
+    // 获取2d渲染上下文对象
+    var ctx = canvas.getContext('2d')
+
+    // 设置初始状态
+    canvas._bgColor = '#ffffff'
+    // 设置绘制线条宽度
+    ctx.lineWidth = 5
+    // 绘制线条颜色
+    ctx.strokeStyle = '#000000'
+    canvas._isEraser = false
+    // 设置初始背景色
+    ctx.fillStyle = canvas._bgColor
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+
+    canvas.addEventListener('mousedown', function (e) {
+      var startX = e.offsetX
+      var startY = e.offsetY
+
+      canvas.addEventListener('mousemove', move)
+      document.addEventListener('mouseup', up)
+
+      canvas.pointer = {
+        startX,
+        startY
+      }
+      drawLine(startX + 1, startY + 1)
+    })
+
+    function move(e) {
+      var x = e.offsetX
+      var y = e.offsetY
+
+      // 以当前移动坐标作为此时连接点
+      drawLine(x, y)
+
+      // 绘制完后 将当前坐标点记录为起始坐标
+      canvas.pointer = {
+        startX: x,
+        startY: y
+      }
+    }
+
+    function up() {
+      canvas.removeEventListener('mousemove', move)
+      document.removeEventListener('mouseup', up)
+    }
+
+    // 绘制线条
+    function drawLine(endX, endY) {
+      if (canvas._isEraser) {
+        return eraserHandle(endX, endY)
+      }
+      ctx.beginPath()
+      ctx.moveTo(canvas.pointer.startX, canvas.pointer.startY)
+      ctx.lineTo(endX, endY)
+      // 设置线条两末端为圆形 略微变长
+      ctx.lineCap = 'round'
+      ctx.stroke()
+    }
+
+    // 颜色切换
+    var colorPicker = $('#colorPicker')
+    colorPicker.addEventListener('change', function () {
+      closeEraser()
+      ctx.strokeStyle = this.value
+    })
+
+    var colorButtonList = $$('.colorButton')
+
+    for (var i = 0; i < colorButtonList.length; i++) {
+      colorButtonList[i].onclick = function () {
+        closeEraser()
+        ctx.strokeStyle = this.style.backgroundColor
+      }
+    }
+
+    // 橡皮擦
+    var eraser = $('#eraser')
+    eraser.addEventListener('click', function () {
+      canvas._isEraser = !canvas._isEraser
+      if (canvas._isEraser) {
+        this.className = 'active'
+        canvas.className = 'activeEraser'
+      } else {
+        canvas.className = this.className = ''
+      }
+    })
+
+    function eraserHandle(x, y) {
+      ctx.beginPath()
+      ctx.arc(x, y, 10, 0, Math.PI * 2)
+      ctx.fillStyle = canvas._bgColor
+      ctx.fill()
+    }
+
+    function closeEraser() {
+      canvas._isEraser = false
+      canvas.className = eraser.className = ''
+    }
+
+    // 清屏
+    var clearCanvas = $('.clearCanvas')
+    clearCanvas.addEventListener('click', function () {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+    })
+
+    // 保存图片
+    var saveImg = $('.saveImg')
+    saveImg.addEventListener('click', function () {
+      var aTag = document.createElement('a')
+      var imgUrl = canvas.toDataURL()
+      aTag.href = imgUrl
+      aTag.download = Date.now()
+      aTag.click()
+    })
+
+    //
+    var bold = $('.bold')
+    var boldVal = $('.boldVal')
+    var thin = $('.thin')
+
+    var MAX_BOLD = 40
+    var MIN_THIN = 5
+    var STEP = 5
+    bold.addEventListener('click', function () {
+      if (ctx.lineWidth < MAX_BOLD) {
+        ctx.lineWidth += STEP
+        boldVal.innerHTML = ctx.lineWidth
+      }
+    })
+
+    thin.addEventListener('click', function () {
+      if (ctx.lineWidth > MIN_THIN) {
+        ctx.lineWidth -= STEP
+        boldVal.innerHTML = ctx.lineWidth
+      }
+    })
+
+  </script>
+</body>
+</html>

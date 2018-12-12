@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .container {
+      width: 740px;
+      margin: 20px auto 0;
+    }
+
+    #canvas {
+      display: block;
+      border: 20px solid #dc2dff;
+    }
+
+    .toolbar {
+      width: 100%;
+      height: 60px;
+      background-color: #ff56e4;
+      padding: 0 30px;
+      box-sizing: border-box;
+      line-height: 60px;
+    }
+
+    #eraser.active {
+      background-color: #FFAA68;
+      color: #ffffff;
+    }
+
+  </style>
+</head>
+<body>
+<div class="container">
+  <canvas id="canvas" width="700" height="400"></canvas>
+  <div class="toolbar">
+    更换颜色
+    <input id="colorPicker" type="color">
+    <button id="eraser">橡皮擦</button>
+    <button class="clear">清屏</button>
+    <button class="saveImg">保存图片</button>
+  </div>
+</div>
+  <script>
+    const $ = function (el) {
+      return document.querySelector(el)
+    }
+
+    const canvas = $('#canvas')
+    // 获取 2d上下文对象
+    const ctx = canvas.getContext('2d')
+
+    // 解决图片背景色问题
+    ctx.fillStyle = '#ffffff'
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+    // 鼠标按下 绑定move移动和up事件
+    canvas.onmousedown = function (e) {
+      // 正对于元素左上角 鼠标坐标点
+      let x = e.offsetX
+      let y = e.offsetY
+
+      // 保存当前鼠标的起始坐标
+      canvas.pointer = {
+        startX: x,
+        startY: y,
+      }
+      drawLine(x + 1, y + 1)
+
+      canvas.onmousemove = move
+      document.onmouseup = up
+    }
+
+    function move(e) {
+      // 获取移动时坐标点 作为 连接点
+      let x = e.offsetX
+      let y = e.offsetY
+      // 执行绘制
+      drawLine(x, y)
+
+      // 当绘制完时 将此时坐标作为下一次 起始坐标
+      canvas.pointer = {
+        startX: x,
+        startY: y,
+      }
+      console.log('move')
+    }
+
+    // 鼠标抬起时移除move事件
+    function up() {
+      console.log('mouseup')
+      canvas.onmousemove = null
+    }
+
+    function drawLine(endX, endY) {
+
+      // 如果 开启橡皮擦功能 就进行 白色圆绘制
+      if (canvas._isEraser) {
+        eraserHandle(endX, endY)
+        return
+      }
+
+      ctx.beginPath() // 开启一个新路径
+      // 绘制线条宽度
+      ctx.lineWidth = 10
+      ctx.lineCap = 'round'
+      ctx.moveTo(canvas.pointer.startX, canvas.pointer.startY) // 起始点
+      ctx.lineTo(endX, endY) // 连接点
+      ctx.stroke() // 进行绘制
+    }
+
+    // 更换颜色
+    const colorPicker = $('#colorPicker')
+    colorPicker.onchange = function () {
+      console.log(this.value)
+      // 绘制的颜色
+      ctx.strokeStyle = this.value
+      closeEraser()
+    }
+
+    // 橡皮擦
+    const eraser = $('#eraser')
+    // 默认关闭
+    canvas._isEraser = false
+    eraser.onclick = function () {
+      canvas._isEraser = !canvas._isEraser
+
+      if (canvas._isEraser) {
+        this.className = 'active'
+      } else {
+        this.className = ''
+      }
+    }
+
+    function eraserHandle(x, y) {
+      ctx.beginPath()
+      ctx.arc(x, y, 10, 0, Math.PI * 2)
+      // 指定填充颜色
+      ctx.fillStyle = '#ffffff'
+      // 进行填充
+      ctx.fill()
+    }
+
+    function closeEraser() {
+      canvas._isEraser = false
+      eraser.className = ''
+    }
+
+    // 清屏
+    const clear = $('.clear')
+    clear.onclick = function () {
+      // 创建一个矩形
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+    }
+
+    // 保存图片
+    const saveImg = $('.saveImg')
+    saveImg.onclick = function () {
+      let aTag = document.createElement('a')
+      aTag.href = canvas.toDataURL()
+      aTag.download = Date.now()
+      // console.log(aTag.href)
+      aTag.click()
+    }
+  </script>
+</body>
+</html>

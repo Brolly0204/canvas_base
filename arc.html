@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style type="text/css">
+    #canvas {
+      display: block;
+      margin: 0 auto;
+      border: 2px solid #ff3d58;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script type="text/javascript">
+    const canvas = document.querySelector('#canvas')
+    const ctx = canvas.getContext('2d')
+
+    canvas.width = 600
+    canvas.height = 600
+
+    ctx.lineWidth = 10
+    ctx.strokeStyle = 'blue'
+    ctx.arc(300, 300, 300, 0, Math.PI)
+    ctx.closePath()
+    ctx.stroke()
+  </script>
+</body>
+</html>

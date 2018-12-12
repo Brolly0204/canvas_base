@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    #canvas {
+      /*width: 500px;*/
+      /*height: 400px;*/
+      border: 2px solid red;
+    }
+  </style>
+</head>
+<body>
+  <!--<canvas id="canvas" height="600" width="600"></canvas>-->
+  <canvas id="canvas"></canvas>
+  <script type="text/javascript">
+    let canvas = document.querySelector('#canvas')
+    // 获取2d渲染上下文对象
+    let ctx = canvas.getContext('2d')
+    canvas.width = 700
+    canvas.height = 700
+    console.log(canvas.width)
+    console.log(canvas.height)
+
+    ctx.lineWidth = 10
+
+    // 制定了绘制路径
+    // 设置起始坐标 落笔点
+    ctx.moveTo(100, 100)
+    // 连接点
+    ctx.lineTo(500, 100)
+
+    // 进行绘制根据 moveTo和lineTo制定路径 进行描边
+    ctx.stroke()
+  </script>
+</body>
+</html>
