@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    #container{
+      width: 700px;
+      border: 20px solid rgb(206, 69, 142);
+      margin: 10px auto 0;
+      user-select: none;
+    }
+
+    .canvas {
+      display: block;
+      background: #ffffff;
+    }
+
+    .canvas.eraserSelect {
+      cursor: move;
+    }
+
+    .toolbar {
+      padding: 10px 15px 0;
+      width: 710px;
+      height: 50px;
+      line-height: 50px;
+      margin: 0 auto;
+      background-color: palevioletred;
+    }
+
+    .clearRectBtn {
+      padding: 3px 5px;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+
+    .eraser, .saveBtn {
+      padding: 3px 5px;
+      vertical-align: middle;
+      margin-left: 10px;
+    }
+
+    .saveBtn {
+      margin-right: 20px;
+    }
+    .eraser.active {
+      background: orange;
+      color: #ffffff;
+    }
+    .bold, .thin {
+      font-size: 15px;
+      padding: 3px 5px;
+      vertical-align: middle;
+    }
+
+    .selectColorBtn {
+      vertical-align: middle;
+    }
+
+    .btnColor {
+      width: 30px;
+      height: 30px;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+<div id="container">
+  <canvas class="canvas" width="700" height="400"></canvas>
+</div>
+<div class="toolbar">
+  更换颜色
+  <input class="selectColorBtn" type="color">
+  <input class="btnColor" type="button" style="background-color: blueviolet">
+  <input class="btnColor" type="button" style="background-color: palegoldenrod">
+  <input class="btnColor" type="button" style="background-color: plum">
+  <input class="btnColor" type="button" style="background-color: rebeccapurple">
+
+  <button class="eraser">橡皮擦</button>
+  <button class="clearRectBtn">清空画布</button>
+  <button class="saveBtn">保存图片</button>
+
+  加粗
+  <button class="bold">+</button>
+  <span class="thick">5</span>
+  <button class="thin">-</button>
+</div>
+<script>
+  var $ = function (name) {
+    return document.querySelector(name)
+  }
+  var $$ = function (name) {
+    return document.querySelectorAll(name)
+  }
+
+  // 获取操作元素
+  var canvas = $('.canvas') // 画布
+  var clearRectBtn = $('.clearRectBtn') // 清空按钮
+  var selectColorBtn = $('.selectColorBtn') // 更换颜色
+  var eraser = $('.eraser') // 橡皮擦
+  var saveBtn = $('.saveBtn') // 保存图片
+  var bold = $('.bold') // 加粗
+  var thin = $('.thin') // 减细
+  var thick = $('.thick') // 粗细程度
+  var btnColorList = $$('.btnColor') // 颜色按钮
+  var bgColor = '#fff'
+
+  // 获取canvas 2D 渲染上下文
+  var ctx = canvas.getContext('2d')
+
+  // 解决导出图片背景色问题
+  ctx.fillStyle = bgColor
+  ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+  // const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+  // console.log(imageData)
+  //
+  // for (var i = 0; i< imageData.data.length; i += 4) {
+  //   if (imageData.data[i + 3] === 0) {
+  //     imageData.data[i] = 255
+  //     imageData.data[i + 1] = 255
+  //     imageData.data[i + 2] = 255
+  //     imageData.data[i + 3] = 255
+  //   }
+  // }
+  // ctx.putImageData(imageData, 0, 0)
+
+  // console.log(ctx)
+  // ctx.beginPath()
+  // ctx.moveTo(20, 20)
+  // ctx.lineTo(20, 100)
+  // ctx.lineTo(70, 100)
+  // ctx.closePath()
+  // ctx.stroke()
+
+  ctx.lineWidth = 5
+
+  bold.addEventListener('click', function() {
+    ctx.lineWidth += 5
+    thick.innerHTML = ctx.lineWidth
+  })
+
+  thin.addEventListener('click', function() {
+    if (ctx.lineWidth > 5) {
+      ctx.lineWidth -= 5
+      thick.innerHTML = ctx.lineWidth
+    }
+  })
+
+  // 图片保存功能
+  var a = document.createElement('a')
+  saveBtn.addEventListener('click', function() {
+    var link = canvas.toDataURL()
+    var img = new Image()
+    img.src = link
+    img.onload = function() {
+      a.href = img.src
+      a.download = Date.now()
+      a.click()
+    }
+
+  })
+
+  // 是否开启橡皮擦功能
+  canvas.isEraser = false
+
+  eraser.addEventListener('click', function() {
+    canvas.isEraser = !canvas.isEraser
+    if (canvas.isEraser) {
+      this.className = 'eraser active'
+      canvas.className = 'canvas eraserSelect'
+    } else {
+      canvas.className = 'canvas'
+      this.className = 'eraser'
+    }
+    console.log('isEraser', canvas.isEraser)
+  })
+
+  function eraserHandle(e) {
+    var x = e.offsetX
+    var y = e.offsetY
+    ctx.beginPath()
+    ctx.arc(x, y, 12, 0, Math.PI * 2)
+    ctx.closePath()
+    ctx.fillStyle = bgColor
+    ctx.fill()
+  }
+
+  canvas.addEventListener('mousedown', function(e) {
+    this.addEventListener('mousemove', move)
+    document.addEventListener('mouseup', up)
+
+    if (this.isEraser) {
+      eraserHandle(e)
+      return
+    }
+    var x = e.offsetX
+    var y = e.offsetY
+
+    this.oldPoint = {
+      x: x - 1,
+      y: y - 1
+    }
+    drawLine(x, y)
+
+  })
+
+  // 绘制线条
+  function drawLine(x, y) {
+    // 开始绘制新路径
+    ctx.beginPath()
+    // // 线条宽度
+    // ctx.lineWidth = 5
+    // 线条两边末端形状 butt | round | square
+    ctx.lineCap = 'round'
+    // 起点坐标
+    ctx.moveTo(canvas.oldPoint.x, canvas.oldPoint.y)
+    // 结束坐标
+    ctx.lineTo(x, y)
+    // 开始绘制 路径 默认：黑色
+    ctx.stroke()
+    // 闭合当前路径
+    ctx.closePath()
+  }
+
+  // 鼠标移动事件
+  function move(e) {
+    if (this.isEraser) {
+      eraserHandle(e)
+      return
+    }
+    var x = e.offsetX
+    var y = e.offsetY
+    // 开始将每次移动后的x y坐标作为此次 结束点绘制
+    drawLine(x, y)
+    // 每次绘制完后的 x y坐标 作为下次起始坐标继续绘制
+    // this.oldPoint = { x, y}
+  }
+
+  // 鼠标抬起 移除 move 和 up 事件
+  function up() {
+    canvas.removeEventListener('mousemove', move)
+    document.removeEventListener('mouseup', up)
+  }
+
+  // 清空画布
+  clearRectBtn.addEventListener('click', function() {
+    closeEraser()
+    // 绘制透明矩形
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+    // ctx.fillStyle = "blue"
+    // ctx.fillRect(0, 0, canvas.width, canvas.height)
+  })
+
+  // 更换线条颜色
+  selectColorBtn.addEventListener('change', function() {
+    closeEraser()
+    ctx.strokeStyle = this.value
+  })
+
+  for (var i = 0; i < btnColorList.length; i++) {
+    btnColorList[i].onclick = function() {
+      closeEraser()
+      ctx.strokeStyle = this.style.backgroundColor
+    }
+  }
+
+  // 关闭橡皮擦功能
+  function closeEraser() {
+    canvas.isEraser = false
+    canvas.className = 'canvas'
+    eraser.className = 'eraser'
+  }
+
+</script>
+</body>
+</html>
